@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>KMZ Path Calculator</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+
+<h2>KMZ Path Length Calculator</h2>
+
+<input type="file" id="fileInput" multiple accept=".kmz">
+<button onclick="upload()">Process</button>
+<button onclick="exportFile('csv')">Export CSV</button>
+<button onclick="exportFile('xlsx')">Export Excel</button>
+
+<pre id="summary"></pre>
+
+<table id="table">
+  <tr>
+    <th>Name</th>
+    <th>Declared (m)</th>
+    <th>Calculated (m)</th>
+    <th>Diff (m)</th>
+    <th>Diff (%)</th>
+  </tr>
+</table>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="/static/script.js"></script>
+</body>
+</html>
