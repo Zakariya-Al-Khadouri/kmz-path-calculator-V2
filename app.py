@@ -1,3 +1,4 @@
+from flask import session, redirect, url_for
 from flask import Flask, render_template, request, jsonify, send_file
 import zipfile
 import xml.etree.ElementTree as ET
@@ -8,6 +9,11 @@ import pandas as pd
 from math import radians, sin, cos, sqrt, asin
 
 app = Flask(__name__)
+
+app.secret_key = "kmz_super_secret_2026"
+USERNAME = "admin"
+PASSWORD = "kmz123"
+
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -83,8 +89,28 @@ def process_kmz(path):
     return results, all_coords
 
 # ---------- Routes ----------
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        if (
+            request.form["username"] == USERNAME
+            and request.form["password"] == PASSWORD
+        ):
+            session["logged_in"] = True
+            return redirect("/")
+        return "Invalid credentials", 401
+    return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+
+
 @app.route("/")
 def index():
+    if not session.get("logged_in"):
+        return redirect("/login")
     return render_template("index.html")
 
 @app.route("/upload", methods=["POST"])
@@ -137,3 +163,4 @@ def export(fmt):
 # ---------- START APP (Render compatible) ----------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=10000)
+
